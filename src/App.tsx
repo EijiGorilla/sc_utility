@@ -161,8 +161,8 @@ function App() {
             width={'2.9%'}
             style={{ marginBottom: 'auto', marginTop: 'auto' }}
           />
-          <b className="headerTitle">N2 UTILITY</b>
-          <div className="date">As of November 17, 2023</div>
+          <b className="headerTitle">SC UTILITY</b>
+          <div className="date">As of December 1, 2023</div>
 
           <div className="dropdownFilter">
             <div className="dropdownFilterLayout">
