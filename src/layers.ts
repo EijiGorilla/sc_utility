@@ -45,6 +45,7 @@ var chainageRenderer = new SimpleRenderer({
   }),
 });
 
+/* chainage layer */
 export const chainageLayer = new FeatureLayer({
   portalItem: {
     id: '299f80a1d0844e109dcf354f9463f6b4',
