@@ -818,7 +818,7 @@ function renderutilityLineLayer() {
   for (var i = 1; i <= utilLineColor.length; i++) {
     renderer.addUniqueValueInfo({
       value: i,
-      symbol: lineSizeShapeSymbolLayers('circle', 'none', 'miter', 0.5, 0.5, 'all', i),
+      symbol: lineSizeShapeSymbolLayers('circle', 'none', 'miter', 0.5, 0.5, 'all', i - 1),
     });
   }
   utilityLineLayer.renderer = renderer;
