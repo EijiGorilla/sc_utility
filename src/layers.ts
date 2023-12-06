@@ -13,6 +13,7 @@ import {
   PathSymbol3DLayer,
   MeshSymbol3D,
   FillSymbol3DLayer,
+  SimpleLineSymbol,
 } from '@arcgis/core/symbols';
 import SolidEdges3D from '@arcgis/core/symbols/edges/SolidEdges3D';
 import SizeVariable from '@arcgis/core/renderers/visualVariables/SizeVariable';
@@ -260,6 +261,105 @@ export const stationLayer = new FeatureLayer({
   },
 });
 stationLayer.listMode = 'hide';
+
+/* NGCP layers */
+const ngcpDpwhRoadRenderer = new SimpleRenderer({
+  symbol: new SimpleFillSymbol({
+    color: [255, 255, 0],
+    style: 'backward-diagonal',
+    outline: {
+      color: '#FFFF00',
+      width: 0.7,
+    },
+  }),
+});
+
+export const ngcpDpwhRoad = new FeatureLayer({
+  portalItem: {
+    id: 'ccc339bfa7524d7abbf6b7c16f8b0b5d',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  layerId: 3,
+  renderer: ngcpDpwhRoadRenderer,
+  elevationInfo: {
+    mode: 'on-the-ground',
+  },
+  popupEnabled: false,
+  title: 'DPWH Road for NGCP',
+});
+
+// Pole Working Area for NGCP: Site 6
+const ngcpPoleWARenderer = new SimpleRenderer({
+  symbol: new SimpleFillSymbol({
+    color: [197, 0, 255],
+    style: 'backward-diagonal',
+    outline: {
+      color: '#C500FF',
+      width: 0.7,
+    },
+  }),
+});
+
+export const ngcpPoleWA = new FeatureLayer({
+  portalItem: {
+    id: 'ccc339bfa7524d7abbf6b7c16f8b0b5d',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  renderer: ngcpPoleWARenderer,
+  elevationInfo: {
+    mode: 'on-the-ground',
+  },
+  layerId: 4,
+  title: 'Pole Working Area for NGCP',
+});
+
+const bufferColor = ['#55FF00', '#FFFF00', '#E1E1E1'];
+const ngcpRowRenderer = new UniqueValueRenderer({
+  legendOptions: {
+    title: 'Proposed ROW (Corridor)',
+  },
+  field: 'Type',
+  uniqueValueInfos: [
+    {
+      value: '15m',
+      symbol: new SimpleLineSymbol({
+        color: bufferColor[0],
+        width: '3px',
+        style: 'dash',
+      }),
+      label: '15m Buffer',
+    },
+    {
+      value: '20m',
+      symbol: new SimpleLineSymbol({
+        color: bufferColor[1],
+        width: '3px',
+        style: 'solid',
+      }),
+      label: '20m Buffer',
+    },
+  ],
+});
+// Symbol for 20m-buffer
+
+export const ngcpPROW = new FeatureLayer({
+  portalItem: {
+    id: 'ccc339bfa7524d7abbf6b7c16f8b0b5d',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  elevationInfo: {
+    mode: 'on-the-ground',
+  },
+  renderer: ngcpRowRenderer,
+  layerId: 5,
+  title: 'PROW Site 6 for NGCP',
+});
 
 // * Utility Point * //
 function customSymbol3D(name: string) {

@@ -9,6 +9,9 @@ import Compass from '@arcgis/core/widgets/Compass';
 
 import {
   chainageLayer,
+  ngcpDpwhRoad,
+  ngcpPROW,
+  ngcpPoleWA,
   pierHeadColumnLayerLayer,
   pierNoLayer,
   rowLayer,
@@ -40,7 +43,15 @@ const alignmentGroupLayer = new GroupLayer({
   layers: [pierHeadColumnLayerLayer, stationBoxLayer, chainageLayer, pierNoLayer, rowLayer], //stationLayer,
 });
 
+const ngcpGroupLayer = new GroupLayer({
+  title: 'NGCP Layers',
+  visible: true,
+  visibilityMode: 'independent',
+  layers: [ngcpDpwhRoad, ngcpPROW, ngcpPoleWA],
+});
+
 map.add(viaductLayer);
+map.add(ngcpGroupLayer);
 map.add(alignmentGroupLayer);
 map.add(utilityGroupLayer);
 map.add(stationLayer);
