@@ -162,7 +162,7 @@ function App() {
             style={{ marginBottom: 'auto', marginTop: 'auto' }}
           />
           <b className="headerTitle">SC UTILITY</b>
-          <div className="date">As of December 8, 2023</div>
+          <div className="date">As of December 29, 2023</div>
 
           <div className="dropdownFilter">
             <div className="dropdownFilterLayout">
