@@ -20,6 +20,16 @@ import SizeVariable from '@arcgis/core/renderers/visualVariables/SizeVariable';
 import RotationVariable from '@arcgis/core/renderers/visualVariables/RotationVariable';
 import { labelSymbol3DLine } from './Label';
 
+/* Standalone table for Dates */
+export const dateTable = new FeatureLayer({
+  portalItem: {
+    id: '68fe46f717f94218a9adcbc1dfb908b7',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+});
+
 /* Chainage Layer  */
 var labelChainage = new LabelClass({
   labelExpressionInfo: { expression: '$feature.KmSpot' },
