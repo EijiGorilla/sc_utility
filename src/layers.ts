@@ -23,7 +23,7 @@ import { labelSymbol3DLine } from './Label';
 /* Standalone table for Dates */
 export const dateTable = new FeatureLayer({
   portalItem: {
-    id: '68fe46f717f94218a9adcbc1dfb908b7',
+    id: 'b2a118b088a44fa0a7a84acbe0844cb2',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -59,12 +59,12 @@ var chainageRenderer = new SimpleRenderer({
 /* chainage layer */
 export const chainageLayer = new FeatureLayer({
   portalItem: {
-    id: '299f80a1d0844e109dcf354f9463f6b4',
+    id: 'e09b9af286204939a32df019403ef438',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
   },
-  layerId: 5,
+  layerId: 2,
   title: 'Chainage',
   elevationInfo: {
     mode: 'relative-to-ground',
@@ -104,12 +104,12 @@ var pierNoLabelClass = new LabelClass({
 
 export const pierNoLayer = new FeatureLayer({
   portalItem: {
-    id: '299f80a1d0844e109dcf354f9463f6b4',
+    id: 'e09b9af286204939a32df019403ef438',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
   },
-  layerId: 6,
+  layerId: 3,
   labelingInfo: [pierNoLabelClass],
   elevationInfo: {
     mode: 'on-the-ground', //absolute-height, relative-to-ground
@@ -164,12 +164,12 @@ let stationBoxRenderer = new UniqueValueRenderer({
 
 export const stationBoxLayer = new FeatureLayer({
   portalItem: {
-    id: '299f80a1d0844e109dcf354f9463f6b4',
+    id: 'e09b9af286204939a32df019403ef438',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
   },
-  layerId: 3,
+  layerId: 7,
   renderer: stationBoxRenderer,
   minScale: 150000,
   maxScale: 0,
@@ -205,7 +205,7 @@ let pierHeadColRenderer = new UniqueValueRenderer({
 
 export const pierHeadColumnLayerLayer = new FeatureLayer({
   portalItem: {
-    id: '299f80a1d0844e109dcf354f9463f6b4',
+    id: 'e09b9af286204939a32df019403ef438',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -221,15 +221,17 @@ export const pierHeadColumnLayerLayer = new FeatureLayer({
 });
 
 // * PROW *//
+var prowRenderer = new SimpleRenderer({
+  symbol: new SimpleLineSymbol({
+    color: '#ff0000',
+    width: '2px',
+  }),
+});
+
 export const rowLayer = new FeatureLayer({
-  portalItem: {
-    id: '299f80a1d0844e109dcf354f9463f6b4',
-    portal: {
-      url: 'https://gis.railway-sector.com/portal',
-    },
-  },
-  layerId: 1,
+  url: 'https://gis.railway-sector.com/server/rest/services/SC_Alignment/FeatureServer/5',
   title: 'ROW',
+  renderer: prowRenderer,
   definitionExpression: "Extension = 'SC'",
   popupEnabled: false,
 });
@@ -258,12 +260,12 @@ var labelClass = new LabelClass({
 
 export const stationLayer = new FeatureLayer({
   portalItem: {
-    id: '299f80a1d0844e109dcf354f9463f6b4',
+    id: 'e09b9af286204939a32df019403ef438',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
   },
-  layerId: 2,
+  layerId: 6,
   title: 'Station',
   labelingInfo: [labelClass],
   elevationInfo: {
@@ -286,7 +288,7 @@ const ngcpDpwhRoadRenderer = new SimpleRenderer({
 
 export const ngcpDpwhRoad = new FeatureLayer({
   portalItem: {
-    id: 'ccc339bfa7524d7abbf6b7c16f8b0b5d',
+    id: 'b7d01020d54c4015ba0ba9454475d1dc',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -314,7 +316,7 @@ const ngcpPoleWARenderer = new SimpleRenderer({
 
 export const ngcpPoleWA = new FeatureLayer({
   portalItem: {
-    id: 'ccc339bfa7524d7abbf6b7c16f8b0b5d',
+    id: 'b7d01020d54c4015ba0ba9454475d1dc',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -358,7 +360,7 @@ const ngcpRowRenderer = new UniqueValueRenderer({
 
 export const ngcpPROW = new FeatureLayer({
   portalItem: {
-    id: 'ccc339bfa7524d7abbf6b7c16f8b0b5d',
+    id: 'b7d01020d54c4015ba0ba9454475d1dc',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -535,7 +537,7 @@ const utilPointSymbolRenderer = new UniqueValueRenderer({
 
 export const utilityPointLayer = new FeatureLayer({
   portalItem: {
-    id: 'ccc339bfa7524d7abbf6b7c16f8b0b5d',
+    id: 'b7d01020d54c4015ba0ba9454475d1dc',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -686,7 +688,7 @@ const utilPointStatusLabel = new LabelClass({
 
 export const utilityPointLayer1 = new FeatureLayer({
   portalItem: {
-    id: 'ccc339bfa7524d7abbf6b7c16f8b0b5d',
+    id: 'b7d01020d54c4015ba0ba9454475d1dc',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -824,7 +826,7 @@ const utilLineStatusRenderer = new UniqueValueRenderer({
 
 export const utilityLineLayer = new FeatureLayer({
   portalItem: {
-    id: 'ccc339bfa7524d7abbf6b7c16f8b0b5d',
+    id: 'b7d01020d54c4015ba0ba9454475d1dc',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -953,7 +955,7 @@ const utilityLineLabelClass = new LabelClass({
 
 export const utilityLineLayer1 = new FeatureLayer({
   portalItem: {
-    id: 'ccc339bfa7524d7abbf6b7c16f8b0b5d',
+    id: 'b7d01020d54c4015ba0ba9454475d1dc',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -1046,7 +1048,10 @@ function renderViaductLayer() {
 
 export const viaductLayer = new SceneLayer({
   portalItem: {
-    id: 'c7364b5cd79748e7866ea8eda9681d73',
+    id: '9075fcc18cdc4a17bddc9d021a2eff1f',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
   elevationInfo: {
     mode: 'absolute-height', //absolute-height, relative-to-ground
