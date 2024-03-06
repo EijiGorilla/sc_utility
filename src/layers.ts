@@ -73,7 +73,7 @@ export const chainageLayer = new FeatureLayer({
   minScale: 150000,
   maxScale: 0,
   renderer: chainageRenderer,
-  outFields: ['*'],
+  // outFields: ['*'],
   popupEnabled: false,
 });
 
@@ -115,7 +115,7 @@ export const pierNoLayer = new FeatureLayer({
     mode: 'on-the-ground', //absolute-height, relative-to-ground
   },
   title: 'Pier No',
-  outFields: ['*'],
+  // outFields: ['*'],
   popupEnabled: false,
 });
 
@@ -174,7 +174,7 @@ export const stationBoxLayer = new FeatureLayer({
   minScale: 150000,
   maxScale: 0,
   title: 'Station Box',
-  outFields: ['*'],
+  // outFields: ['*'],
   popupEnabled: false,
   elevationInfo: {
     mode: 'on-the-ground',
@@ -212,7 +212,7 @@ export const pierHeadColumnLayerLayer = new FeatureLayer({
   },
   layerId: 4,
   title: 'Pier Head/Column',
-  outFields: ['*'],
+  // outFields: ['*'],
   renderer: pierHeadColRenderer,
   elevationInfo: {
     mode: 'on-the-ground',
@@ -544,7 +544,7 @@ export const utilityPointLayer = new FeatureLayer({
   },
   layerId: 1,
   title: 'Point Symbol',
-  outFields: ['*'],
+  // outFields: ['*'],
   renderer: utilPointSymbolRenderer,
   elevationInfo: {
     mode: 'relative-to-ground', // original was "relative-to-scene"
@@ -695,7 +695,7 @@ export const utilityPointLayer1 = new FeatureLayer({
   },
   layerId: 1,
   title: 'Point Status',
-  outFields: ['*'],
+  // outFields: ['*'],
   renderer: utilityStatusRenderer,
   elevationInfo: {
     mode: 'relative-to-ground', // original was "relative-to-scene"
@@ -841,7 +841,7 @@ export const utilityLineLayer = new FeatureLayer({
     unit: 'meters',
     //offset: 0
   },
-  outFields: ['*'],
+  // outFields: ['*'],
   popupTemplate: {
     title: '<h5>{comp_agency}</h5>',
     lastEditInfoEnabled: false,
@@ -970,7 +970,7 @@ export const utilityLineLayer1 = new FeatureLayer({
     unit: 'meters',
     //offset: 0
   },
-  outFields: ['*'],
+  // outFields: ['*'],
   renderer: utilLineStatusRenderer,
   labelingInfo: [utilityLineLabelClass],
   popupTemplate: {
@@ -1057,7 +1057,7 @@ export const viaductLayer = new SceneLayer({
     mode: 'absolute-height', //absolute-height, relative-to-ground
   },
   title: 'Viaduct',
-  outFields: ['*'],
+  // outFields: ['*'],
 });
 
 renderViaductLayer();
