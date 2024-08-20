@@ -1,12 +1,12 @@
 {
   "homepage": "https://eijigorilla.github.io/sc_utility",
   "name": "sc_utility",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "dependencies": {
     "@amcharts/amcharts5": "^5.6.2",
-    "@arcgis/core": "^4.28.8",
-    "@esri/calcite-components-react": "^1.10.0",
+    "@arcgis/core": "^4.30.9",
+    "@esri/calcite-components-react": "^2.8.5",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

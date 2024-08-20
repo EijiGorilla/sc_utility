@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { view } from '../Scene';
-import { utilityPointLayer1, utilityLineLayer1 } from '../layers';
+import {
+  utilityPointLayer1,
+  utilityLineLayer1,
+  utilityPointLayer,
+  utilityLineLayer,
+} from '../layers';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
 import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
 import Query from '@arcgis/core/rest/support/Query';
@@ -41,6 +46,8 @@ const Chart = ({ contractp, company, type }: any) => {
   const [featureLayer, setFeatureLayer] = useState<FeatureLayer>(utilityPointLayer1);
   const [pointFeatureLayer, setPointFeatureLayer] = useState<FeatureLayer>(utilityPointLayer1);
   const [lineFeatureLayer, setLineFeatureLayer] = useState<FeatureLayer>(utilityLineLayer1);
+  const [pointFeatureLayer1, setPointFeatureLayer1] = useState<FeatureLayer>(utilityPointLayer);
+  const [lineFeatureLayer1, setLineFeatureLayer1] = useState<FeatureLayer>(utilityLineLayer);
 
   useEffect(() => {
     if (type.name === 'Point') {
@@ -75,6 +82,8 @@ const Chart = ({ contractp, company, type }: any) => {
 
       setLineFeatureLayer(utilityLineLayer1);
       setPointFeatureLayer(utilityPointLayer1);
+      setLineFeatureLayer1(utilityLineLayer);
+      setPointFeatureLayer1(utilityPointLayer);
     }
   }, [contractp, company, type, type.name]);
 
@@ -299,22 +308,27 @@ const Chart = ({ contractp, company, type }: any) => {
 
         const selectedStatus: number | null = fieldName === 'incomp' ? 0 : 1;
 
-        const sqlExpressionWithCP =
-          "CP = '" +
-          contractp +
-          "'" +
-          ' AND ' +
-          'UtilType = ' +
-          typeSelect +
-          ' AND ' +
-          'Status = ' +
-          selectedStatus;
-        // eslint-disable-next-line no-useless-concat
-        const sqlExpression = 'UtilType = ' + typeSelect + ' AND ' + 'Status = ' + selectedStatus;
+        const qCp = "CP = '" + contractp + "'";
+        const qCompany = "Company = '" + company + "'";
+        const qType = "Type = '" + type.name + "'";
+        const qUtilType = 'UtilType = ' + typeSelect;
+        const qStatus = 'Status = ' + selectedStatus;
+        const qUtilTypeStatus = qUtilType + ' AND ' + qStatus;
+        const qCpUtilTypeStatus = qCp + ' AND ' + qUtilTypeStatus;
+        const qCpCompanyUtiltypeStatus = qCp + ' AND ' + qCompany + ' AND ' + qUtilTypeStatus;
+        const qCpCompanyUtiltypeStatusType = qCpCompanyUtiltypeStatus + ' AND ' + qType;
+
+        const qExpression = !contractp
+          ? qUtilTypeStatus
+          : contractp && !company
+            ? qCpUtilTypeStatus
+            : contractp && company && !type.name
+              ? qCpCompanyUtiltypeStatus
+              : qCpCompanyUtiltypeStatusType;
 
         // Define Query
         var query = featureLayer.createQuery();
-        query.where = contractp === undefined ? sqlExpression : sqlExpressionWithCP;
+        query.where = qExpression;
 
         // layerView filter and highlight
         if (type.name === 'Point' || type.name === 'Line') {
@@ -354,18 +368,16 @@ const Chart = ({ contractp, company, type }: any) => {
                 });
               });
               layerView.filter = new FeatureFilter({
-                where: contractp.cp === undefined ? sqlExpression : sqlExpressionWithCP,
+                where: qExpression,
               });
             });
           });
           // Point + Line
         } else if (type.name === undefined) {
-          console.log('type is undefined');
-          //let arrLviews: any = [];
           view.when(() => {
+            //----- Utility Point Feature Filter ------//
             let highlightSelect: any;
             view.whenLayerView(pointFeatureLayer).then((layerView: any) => {
-              //arrLviews.push(layerView);
               pointFeatureLayer.queryFeatures(query).then((results: any) => {
                 if (results.features.length === 0) {
                 } else {
@@ -402,7 +414,7 @@ const Chart = ({ contractp, company, type }: any) => {
                 }
               });
               layerView.filter = new FeatureFilter({
-                where: contractp.cp === undefined ? sqlExpression : sqlExpressionWithCP,
+                where: qExpression,
               });
 
               // For initial state, we need to add this
@@ -414,6 +426,57 @@ const Chart = ({ contractp, company, type }: any) => {
               });
             });
 
+            let highlightSelect11: any;
+            view.whenLayerView(pointFeatureLayer1).then((layerView: any) => {
+              pointFeatureLayer1.queryFeatures(query).then((results: any) => {
+                if (results.features.length === 0) {
+                } else {
+                  const lengths = results.features;
+                  const rows = lengths.length;
+
+                  let objID = [];
+                  for (var i = 0; i < rows; i++) {
+                    var obj = results.features[i].attributes.OBJECTID;
+                    objID.push(obj);
+                  }
+
+                  var queryExt = new Query({
+                    objectIds: objID,
+                  });
+
+                  pointFeatureLayer1.queryExtent(queryExt).then((result: any) => {
+                    if (result.extent) {
+                      view.goTo(result.extent);
+                    }
+                  });
+
+                  if (highlightSelect11) {
+                    highlightSelect11.remove();
+                  }
+                  highlightSelect11 = layerView.highlight(objID);
+
+                  view.on('click', () => {
+                    layerView.filter = new FeatureFilter({
+                      where: undefined,
+                    });
+                    highlightSelect11.remove();
+                  });
+                }
+              });
+              layerView.filter = new FeatureFilter({
+                where: qExpression,
+              });
+
+              // For initial state, we need to add this
+              view.on('click', () => {
+                layerView.filter = new FeatureFilter({
+                  where: undefined,
+                });
+                highlightSelect11 !== undefined ? highlightSelect11.remove() : console.log('');
+              });
+            });
+
+            //----- Utility Line Feature Filter ------//
             view.whenLayerView(lineFeatureLayer).then((layerView: any) => {
               //arrLviews.push(layerView);
               let highlightSelect2: any;
@@ -453,7 +516,7 @@ const Chart = ({ contractp, company, type }: any) => {
                 }
               });
               layerView.filter = new FeatureFilter({
-                where: contractp.cp === undefined ? sqlExpression : sqlExpressionWithCP,
+                where: qExpression,
               });
 
               // For initial state, we need to add this
@@ -462,6 +525,56 @@ const Chart = ({ contractp, company, type }: any) => {
                   where: undefined,
                 });
                 highlightSelect2 !== undefined ? highlightSelect2.remove() : console.log('');
+              });
+            });
+
+            view.whenLayerView(lineFeatureLayer1).then((layerView: any) => {
+              let highlightSelect22: any;
+              lineFeatureLayer1.queryFeatures(query).then((results: any) => {
+                if (results.features.length === 0) {
+                } else {
+                  const lengths = results.features;
+                  const rows = lengths.length;
+
+                  let objID = [];
+                  for (var i = 0; i < rows; i++) {
+                    var obj = results.features[i].attributes.OBJECTID;
+                    objID.push(obj);
+                  }
+
+                  var queryExt = new Query({
+                    objectIds: objID,
+                  });
+
+                  lineFeatureLayer1.queryExtent(queryExt).then((result: any) => {
+                    if (result.extent) {
+                      view.goTo(result.extent);
+                    }
+                  });
+
+                  if (highlightSelect22) {
+                    highlightSelect22.remove();
+                  }
+                  highlightSelect22 = layerView.highlight(objID);
+
+                  view.on('click', () => {
+                    layerView.filter = new FeatureFilter({
+                      where: undefined,
+                    });
+                    highlightSelect22.remove();
+                  });
+                }
+              });
+              layerView.filter = new FeatureFilter({
+                where: qExpression,
+              });
+
+              // For initial state, we need to add this
+              view.on('click', () => {
+                layerView.filter = new FeatureFilter({
+                  where: undefined,
+                });
+                highlightSelect22 !== undefined ? highlightSelect22.remove() : console.log('');
               });
             });
           });
