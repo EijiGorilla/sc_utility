@@ -329,13 +329,13 @@ const Chart = ({ contractp, company, type }: any) => {
         // Define Query
         var query = featureLayer.createQuery();
         query.where = qExpression;
-
-        // layerView filter and highlight
-        if (type.name === 'Point' || type.name === 'Line') {
+        view.when(() => {
+          //----- Utility Point Feature Filter ------//
           let highlightSelect: any;
-          view.when(() => {
-            view.whenLayerView(featureLayer).then((layerView: any) => {
-              featureLayer.queryFeatures(query).then((results: any) => {
+          view.whenLayerView(pointFeatureLayer).then((layerView: any) => {
+            pointFeatureLayer.queryFeatures(query).then((results: any) => {
+              if (results.features.length === 0) {
+              } else {
                 const lengths = results.features;
                 const rows = lengths.length;
 
@@ -349,7 +349,7 @@ const Chart = ({ contractp, company, type }: any) => {
                   objectIds: objID,
                 });
 
-                featureLayer.queryExtent(queryExt).then((result: any) => {
+                pointFeatureLayer.queryExtent(queryExt).then((result: any) => {
                   if (result.extent) {
                     view.goTo(result.extent);
                   }
@@ -366,219 +366,173 @@ const Chart = ({ contractp, company, type }: any) => {
                   });
                   highlightSelect.remove();
                 });
-              });
+              }
+            });
+            layerView.filter = new FeatureFilter({
+              where: qExpression,
+            });
+
+            // For initial state, we need to add this
+            view.on('click', () => {
               layerView.filter = new FeatureFilter({
-                where: qExpression,
+                where: undefined,
               });
+              highlightSelect !== undefined ? highlightSelect.remove() : console.log('');
             });
           });
-          // Point + Line
-        } else if (type.name === undefined) {
-          view.when(() => {
-            //----- Utility Point Feature Filter ------//
-            let highlightSelect: any;
-            view.whenLayerView(pointFeatureLayer).then((layerView: any) => {
-              pointFeatureLayer.queryFeatures(query).then((results: any) => {
-                if (results.features.length === 0) {
-                } else {
-                  const lengths = results.features;
-                  const rows = lengths.length;
 
-                  let objID = [];
-                  for (var i = 0; i < rows; i++) {
-                    var obj = results.features[i].attributes.OBJECTID;
-                    objID.push(obj);
-                  }
+          let highlightSelect11: any;
+          view.whenLayerView(pointFeatureLayer1).then((layerView: any) => {
+            pointFeatureLayer1.queryFeatures(query).then((results: any) => {
+              if (results.features.length === 0) {
+              } else {
+                const lengths = results.features;
+                const rows = lengths.length;
 
-                  var queryExt = new Query({
-                    objectIds: objID,
-                  });
-
-                  pointFeatureLayer.queryExtent(queryExt).then((result: any) => {
-                    if (result.extent) {
-                      view.goTo(result.extent);
-                    }
-                  });
-
-                  if (highlightSelect) {
-                    highlightSelect.remove();
-                  }
-                  highlightSelect = layerView.highlight(objID);
-
-                  view.on('click', () => {
-                    layerView.filter = new FeatureFilter({
-                      where: undefined,
-                    });
-                    highlightSelect.remove();
-                  });
+                let objID = [];
+                for (var i = 0; i < rows; i++) {
+                  var obj = results.features[i].attributes.OBJECTID;
+                  objID.push(obj);
                 }
-              });
-              layerView.filter = new FeatureFilter({
-                where: qExpression,
-              });
 
-              // For initial state, we need to add this
-              view.on('click', () => {
-                layerView.filter = new FeatureFilter({
-                  where: undefined,
+                var queryExt = new Query({
+                  objectIds: objID,
                 });
-                highlightSelect !== undefined ? highlightSelect.remove() : console.log('');
-              });
+
+                pointFeatureLayer1.queryExtent(queryExt).then((result: any) => {
+                  if (result.extent) {
+                    view.goTo(result.extent);
+                  }
+                });
+
+                if (highlightSelect11) {
+                  highlightSelect11.remove();
+                }
+                highlightSelect11 = layerView.highlight(objID);
+
+                view.on('click', () => {
+                  layerView.filter = new FeatureFilter({
+                    where: undefined,
+                  });
+                  highlightSelect11.remove();
+                });
+              }
+            });
+            layerView.filter = new FeatureFilter({
+              where: qExpression,
             });
 
-            let highlightSelect11: any;
-            view.whenLayerView(pointFeatureLayer1).then((layerView: any) => {
-              pointFeatureLayer1.queryFeatures(query).then((results: any) => {
-                if (results.features.length === 0) {
-                } else {
-                  const lengths = results.features;
-                  const rows = lengths.length;
-
-                  let objID = [];
-                  for (var i = 0; i < rows; i++) {
-                    var obj = results.features[i].attributes.OBJECTID;
-                    objID.push(obj);
-                  }
-
-                  var queryExt = new Query({
-                    objectIds: objID,
-                  });
-
-                  pointFeatureLayer1.queryExtent(queryExt).then((result: any) => {
-                    if (result.extent) {
-                      view.goTo(result.extent);
-                    }
-                  });
-
-                  if (highlightSelect11) {
-                    highlightSelect11.remove();
-                  }
-                  highlightSelect11 = layerView.highlight(objID);
-
-                  view.on('click', () => {
-                    layerView.filter = new FeatureFilter({
-                      where: undefined,
-                    });
-                    highlightSelect11.remove();
-                  });
-                }
-              });
+            // For initial state, we need to add this
+            view.on('click', () => {
               layerView.filter = new FeatureFilter({
-                where: qExpression,
+                where: undefined,
               });
-
-              // For initial state, we need to add this
-              view.on('click', () => {
-                layerView.filter = new FeatureFilter({
-                  where: undefined,
-                });
-                highlightSelect11 !== undefined ? highlightSelect11.remove() : console.log('');
-              });
-            });
-
-            //----- Utility Line Feature Filter ------//
-            view.whenLayerView(lineFeatureLayer).then((layerView: any) => {
-              //arrLviews.push(layerView);
-              let highlightSelect2: any;
-              lineFeatureLayer.queryFeatures(query).then((results: any) => {
-                if (results.features.length === 0) {
-                } else {
-                  const lengths = results.features;
-                  const rows = lengths.length;
-
-                  let objID = [];
-                  for (var i = 0; i < rows; i++) {
-                    var obj = results.features[i].attributes.OBJECTID;
-                    objID.push(obj);
-                  }
-
-                  var queryExt = new Query({
-                    objectIds: objID,
-                  });
-
-                  lineFeatureLayer.queryExtent(queryExt).then((result: any) => {
-                    if (result.extent) {
-                      view.goTo(result.extent);
-                    }
-                  });
-
-                  if (highlightSelect2) {
-                    highlightSelect2.remove();
-                  }
-                  highlightSelect2 = layerView.highlight(objID);
-
-                  view.on('click', () => {
-                    layerView.filter = new FeatureFilter({
-                      where: undefined,
-                    });
-                    highlightSelect2.remove();
-                  });
-                }
-              });
-              layerView.filter = new FeatureFilter({
-                where: qExpression,
-              });
-
-              // For initial state, we need to add this
-              view.on('click', () => {
-                layerView.filter = new FeatureFilter({
-                  where: undefined,
-                });
-                highlightSelect2 !== undefined ? highlightSelect2.remove() : console.log('');
-              });
-            });
-
-            view.whenLayerView(lineFeatureLayer1).then((layerView: any) => {
-              let highlightSelect22: any;
-              lineFeatureLayer1.queryFeatures(query).then((results: any) => {
-                if (results.features.length === 0) {
-                } else {
-                  const lengths = results.features;
-                  const rows = lengths.length;
-
-                  let objID = [];
-                  for (var i = 0; i < rows; i++) {
-                    var obj = results.features[i].attributes.OBJECTID;
-                    objID.push(obj);
-                  }
-
-                  var queryExt = new Query({
-                    objectIds: objID,
-                  });
-
-                  lineFeatureLayer1.queryExtent(queryExt).then((result: any) => {
-                    if (result.extent) {
-                      view.goTo(result.extent);
-                    }
-                  });
-
-                  if (highlightSelect22) {
-                    highlightSelect22.remove();
-                  }
-                  highlightSelect22 = layerView.highlight(objID);
-
-                  view.on('click', () => {
-                    layerView.filter = new FeatureFilter({
-                      where: undefined,
-                    });
-                    highlightSelect22.remove();
-                  });
-                }
-              });
-              layerView.filter = new FeatureFilter({
-                where: qExpression,
-              });
-
-              // For initial state, we need to add this
-              view.on('click', () => {
-                layerView.filter = new FeatureFilter({
-                  where: undefined,
-                });
-                highlightSelect22 !== undefined ? highlightSelect22.remove() : console.log('');
-              });
+              highlightSelect11 !== undefined ? highlightSelect11.remove() : console.log('');
             });
           });
-        }
+
+          //----- Utility Line Feature Filter ------//
+          view.whenLayerView(lineFeatureLayer).then((layerView: any) => {
+            //arrLviews.push(layerView);
+            let highlightSelect2: any;
+            lineFeatureLayer.queryFeatures(query).then((results: any) => {
+              if (results.features.length === 0) {
+              } else {
+                const lengths = results.features;
+                const rows = lengths.length;
+
+                let objID = [];
+                for (var i = 0; i < rows; i++) {
+                  var obj = results.features[i].attributes.OBJECTID;
+                  objID.push(obj);
+                }
+
+                var queryExt = new Query({
+                  objectIds: objID,
+                });
+
+                lineFeatureLayer.queryExtent(queryExt).then((result: any) => {
+                  if (result.extent) {
+                    view.goTo(result.extent);
+                  }
+                });
+
+                if (highlightSelect2) {
+                  highlightSelect2.remove();
+                }
+                highlightSelect2 = layerView.highlight(objID);
+
+                view.on('click', () => {
+                  layerView.filter = new FeatureFilter({
+                    where: undefined,
+                  });
+                  highlightSelect2.remove();
+                });
+              }
+            });
+            layerView.filter = new FeatureFilter({
+              where: qExpression,
+            });
+
+            // For initial state, we need to add this
+            view.on('click', () => {
+              layerView.filter = new FeatureFilter({
+                where: undefined,
+              });
+              highlightSelect2 !== undefined ? highlightSelect2.remove() : console.log('');
+            });
+          });
+
+          view.whenLayerView(lineFeatureLayer1).then((layerView: any) => {
+            let highlightSelect22: any;
+            lineFeatureLayer1.queryFeatures(query).then((results: any) => {
+              if (results.features.length === 0) {
+              } else {
+                const lengths = results.features;
+                const rows = lengths.length;
+
+                let objID = [];
+                for (var i = 0; i < rows; i++) {
+                  var obj = results.features[i].attributes.OBJECTID;
+                  objID.push(obj);
+                }
+
+                var queryExt = new Query({
+                  objectIds: objID,
+                });
+
+                lineFeatureLayer1.queryExtent(queryExt).then((result: any) => {
+                  if (result.extent) {
+                    view.goTo(result.extent);
+                  }
+                });
+
+                if (highlightSelect22) {
+                  highlightSelect22.remove();
+                }
+                highlightSelect22 = layerView.highlight(objID);
+
+                view.on('click', () => {
+                  layerView.filter = new FeatureFilter({
+                    where: undefined,
+                  });
+                  highlightSelect22.remove();
+                });
+              }
+            });
+            layerView.filter = new FeatureFilter({
+              where: qExpression,
+            });
+
+            // For initial state, we need to add this
+            view.on('click', () => {
+              layerView.filter = new FeatureFilter({
+                where: undefined,
+              });
+              highlightSelect22 !== undefined ? highlightSelect22.remove() : console.log('');
+            });
+          });
+        });
       });
       legend.data.push(series);
     }
