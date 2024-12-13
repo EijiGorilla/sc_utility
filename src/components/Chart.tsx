@@ -544,17 +544,38 @@ const Chart = ({ contractp, company, type }: any) => {
       root.dispose();
     };
   });
+  // Chart and chart label color
+  const primaryLabelColor = '#9ca3af';
+  const valueLabelColor = '#d1d5db';
 
   return (
     <div>
       <div className="totalProgressDiv">
         <div>
-          <div className="totalProgressLabel">TOTAL PROGRESS</div>
+          <div
+            className="totalProgressLabel"
+            style={{ color: primaryLabelColor, fontSize: '1.5rem' }}
+          >
+            Total Progress
+          </div>
           <br />
           <br />
-          <b className="totalProgressNumber">
+          <b
+            className="totalProgressNumber"
+            style={{
+              color: valueLabelColor,
+              fontSize: '2.6rem',
+              fontWeight: 'bold',
+              fontFamily: 'calibri',
+              lineHeight: '1.2',
+              marginLeft: '15px',
+              margin: 'auto',
+            }}
+          >
             {thousands_separators(progress[1])} %{' '}
-            <div className="totalProgressNumber2">({thousands_separators(progress[0])})</div>
+            <div className="totalProgressNumber2" style={{ marginLeft: '15px' }}>
+              ({thousands_separators(progress[0])})
+            </div>
           </b>
         </div>
         <img
