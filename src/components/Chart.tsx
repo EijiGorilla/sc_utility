@@ -24,6 +24,7 @@ import {
   generateUtilPointProgress,
   thousands_separators,
 } from '../Query';
+import { useDropdownContext } from './DropdownContext';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -35,7 +36,12 @@ function maybeDisposeRoot(divId: any) {
 }
 
 // Draw chart
-const Chart = ({ contractp, company, type }: any) => {
+const Chart = () => {
+  const { contractPackage, companySelected, utypes } = useDropdownContext();
+  const contractp = contractPackage === null ? undefined : contractPackage.field1;
+  const company = companySelected === null ? undefined : companySelected.name;
+  const type = utypes === null ? undefined : utypes.name;
+
   const legendRef = useRef<unknown | any | undefined>({});
   const chartRef = useRef<unknown | any | undefined>({});
   const [chartData, setChartData] = useState([]);
@@ -50,7 +56,7 @@ const Chart = ({ contractp, company, type }: any) => {
   const [lineFeatureLayer1, setLineFeatureLayer1] = useState<FeatureLayer>(utilityLineLayer);
 
   useEffect(() => {
-    if (type.name === 'Point') {
+    if (type === 'Point') {
       generateUtilPointChartData({ contractp, company }).then((response: any) => {
         setChartData(response);
       });
@@ -60,7 +66,7 @@ const Chart = ({ contractp, company, type }: any) => {
       });
 
       setFeatureLayer(utilityPointLayer1);
-    } else if (type.name === 'Line') {
+    } else if (type === 'Line') {
       generateUtilLineChartData({ contractp, company }).then((response: any) => {
         setChartData(response);
       });
@@ -70,7 +76,7 @@ const Chart = ({ contractp, company, type }: any) => {
       });
 
       setFeatureLayer(utilityLineLayer1);
-    } else if (type.name === undefined) {
+    } else if (type === undefined) {
       // Point + Line
       generatePointLineChartData({ contractp, company }).then((response: any) => {
         setChartData(response);
@@ -85,7 +91,7 @@ const Chart = ({ contractp, company, type }: any) => {
       setLineFeatureLayer1(utilityLineLayer);
       setPointFeatureLayer1(utilityPointLayer);
     }
-  }, [contractp, company, type, type.name]);
+  }, [contractp, company, type]);
 
   // type
   const types = [
@@ -310,7 +316,7 @@ const Chart = ({ contractp, company, type }: any) => {
 
         const qCp = "CP = '" + contractp + "'";
         const qCompany = "Company = '" + company + "'";
-        const qType = "Type = '" + type.name + "'";
+        const qType = "Type = '" + type + "'";
         const qUtilType = 'UtilType = ' + typeSelect;
         const qStatus = 'Status = ' + selectedStatus;
         const qUtilTypeStatus = qUtilType + ' AND ' + qStatus;
@@ -322,7 +328,7 @@ const Chart = ({ contractp, company, type }: any) => {
           ? qUtilTypeStatus
           : contractp && !company
             ? qCpUtilTypeStatus
-            : contractp && company && !type.name
+            : contractp && company && !type
               ? qCpCompanyUtiltypeStatus
               : qCpCompanyUtiltypeStatusType;
 

@@ -365,7 +365,7 @@ export async function generatePointLineChartData({ contractp, company }: any) {
     utilityPointLayer1.visible = true;
   };
 
-  if (contractp === '') {
+  if (contractp === undefined) {
     query.where = '1=1';
     utilityPointLayer.definitionExpression = '1=1';
     utilityPointLayer1.definitionExpression = '1=1';
@@ -554,7 +554,7 @@ export async function generateTotalProgress({ contractp, company }: any) {
   const qCpCompany = qCP + ' AND ' + qCompany;
   const finalExpression = contractp && !company ? qCP : qCpCompany;
 
-  if (contractp === '') {
+  if (contractp === undefined) {
     query.where = '1=1';
   } else {
     query.where = finalExpression;
