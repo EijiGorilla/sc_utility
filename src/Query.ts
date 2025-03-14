@@ -45,7 +45,7 @@ export async function dateUpdate() {
 }
 
 // Generate chart data
-const uitlType = ['Telecom', 'Water', 'Sewage', 'Power'];
+const uitlType = ['Telecom', 'Water', 'Sewage', 'Power', 'Oil & Gas'];
 
 export async function generateUtilPointChartData({ contractp, company }: any) {
   var total_telecom_incomp = new StatisticDefinition({
@@ -218,6 +218,18 @@ export async function generateUtilLineChartData({ contractp, company }: any) {
     statisticType: 'sum',
   });
 
+  var total_oilgas_incomp = new StatisticDefinition({
+    onStatisticField: 'CASE WHEN (UtilType = 5 and Status = 0) THEN 1 ELSE 0 END',
+    outStatisticFieldName: 'total_oilgas_incomp',
+    statisticType: 'sum',
+  });
+
+  var total_oilgas_comp = new StatisticDefinition({
+    onStatisticField: 'CASE WHEN (UtilType = 5 and Status = 1) THEN 1 ELSE 0 END',
+    outStatisticFieldName: 'total_oilgas_comp',
+    statisticType: 'sum',
+  });
+
   // Query
   var query = utilityLineLayer.createQuery();
   query.outStatistics = [
@@ -229,6 +241,8 @@ export async function generateUtilLineChartData({ contractp, company }: any) {
     total_sewage_comp,
     total_power_incomp,
     total_power_comp,
+    total_oilgas_incomp,
+    total_oilgas_comp,
   ];
 
   // Query
@@ -260,6 +274,8 @@ export async function generateUtilLineChartData({ contractp, company }: any) {
     const sewage_comp = stats.total_sewage_comp;
     const power_incomp = stats.total_power_incomp;
     const power_comp = stats.total_power_comp;
+    const oilgas_incomp = stats.total_power_incomp;
+    const oilgas_comp = stats.total_power_comp;
 
     const data = [
       {
@@ -285,6 +301,12 @@ export async function generateUtilLineChartData({ contractp, company }: any) {
         comp: power_comp,
         incomp: power_incomp,
         icon: 'https://EijiGorilla.github.io/Symbols/Power_Logo2.svg',
+      },
+      {
+        category: uitlType[4],
+        comp: oilgas_comp,
+        incomp: oilgas_incomp,
+        icon: 'https://EijiGorilla.github.io/Symbols/Gas_Logo2.svg',
       },
     ];
     return data;
@@ -340,6 +362,18 @@ export async function generatePointLineChartData({ contractp, company }: any) {
     statisticType: 'sum',
   });
 
+  var total_oilgas_incomp = new StatisticDefinition({
+    onStatisticField: 'CASE WHEN (UtilType = 5 and Status = 0) THEN 1 ELSE 0 END',
+    outStatisticFieldName: 'total_oilgas_incomp',
+    statisticType: 'sum',
+  });
+
+  var total_oilgas_comp = new StatisticDefinition({
+    onStatisticField: 'CASE WHEN (UtilType = 5 and Status = 1) THEN 1 ELSE 0 END',
+    outStatisticFieldName: 'total_oilgas_comp',
+    statisticType: 'sum',
+  });
+
   var query = new Query();
   query.outStatistics = [
     total_water_incomp,
@@ -350,6 +384,8 @@ export async function generatePointLineChartData({ contractp, company }: any) {
     total_power_comp,
     total_telecom_incomp,
     total_telecom_comp,
+    total_oilgas_incomp,
+    total_oilgas_incomp,
   ];
 
   // Query
@@ -394,6 +430,8 @@ export async function generatePointLineChartData({ contractp, company }: any) {
     const power_incomp = stats.total_power_incomp;
     const telecom_comp = stats.total_telecom_comp;
     const telecom_incomp = stats.total_telecom_incomp;
+    const oilgas_incomp = stats.total_oilgas_incomp;
+    const oilgas_comp = stats.total_oilgas_comp;
 
     return [
       water_comp,
@@ -404,6 +442,8 @@ export async function generatePointLineChartData({ contractp, company }: any) {
       power_incomp,
       telecom_comp,
       telecom_incomp,
+      oilgas_comp,
+      oilgas_incomp,
     ];
   });
 
@@ -417,6 +457,8 @@ export async function generatePointLineChartData({ contractp, company }: any) {
     const power_incomp = stats.total_power_incomp;
     const telecom_comp = stats.total_telecom_comp;
     const telecom_incomp = stats.total_telecom_incomp;
+    const oilgas_comp = stats.total_oilgas_comp;
+    const oilgas_incomp = stats.total_oilgas_incomp;
 
     return [
       water_comp,
@@ -427,6 +469,8 @@ export async function generatePointLineChartData({ contractp, company }: any) {
       power_incomp,
       telecom_comp,
       telecom_incomp,
+      oilgas_comp,
+      oilgas_incomp,
     ];
   });
 
@@ -466,6 +510,12 @@ export async function generatePointLineChartData({ contractp, company }: any) {
       comp: point[4] + line[4],
       incomp: point[5] + line[5],
       icon: 'https://EijiGorilla.github.io/Symbols/Power_Logo2.svg',
+    },
+    {
+      category: uitlType[4], // Oil & Gas
+      comp: point[8] + line[8],
+      incomp: point[9] + line[9],
+      icon: 'https://EijiGorilla.github.io/Symbols/Gas_Logo2.svg',
     },
   ];
   return data;

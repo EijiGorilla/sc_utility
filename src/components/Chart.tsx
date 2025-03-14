@@ -111,6 +111,10 @@ const Chart = () => {
       category: 'Power',
       value: 4,
     },
+    {
+      category: 'Oil & Gas',
+      value: 5,
+    },
   ];
 
   // Define parameters
